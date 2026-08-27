@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometría Fractal vs Euclidiana</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --fractal-color: #6C3CE1;
+            --euclidean-color: #0EA5E9;
+            --fractal-gradient: linear-gradient(135deg, #6C3CE1, #A855F7);
+            --euclidean-gradient: linear-gradient(135deg, #0EA5E9, #38BDF8);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0F172A;
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at 20% 50%, rgba(108,60,225,0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 50%, rgba(14,165,233,0.15) 0%, transparent 50%),
+                        #0F172A;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: #94A3B8;
+            max-width: 600px;
+            margin: 1rem auto 0;
+        }
+
+        .hero .vs-badge {
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--fractal-color), var(--euclidean-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 1.5rem 0;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: #475569;
+            font-size: 0.85rem;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Secciones */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #94A3B8;
+            max-width: 650px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Cards de geometría */
+        .geo-card {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1rem;
+            padding: 2rem;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, border-color 0.3s;
+            height: 100%;
+        }
+
+        .geo-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .geo-card.fractal:hover {
+            border-color: rgba(108,60,225,0.5);
+        }
+
+        .geo-card.euclidean:hover {
+            border-color: rgba(14,165,233,0.5);
+        }
+
+        .geo-card .card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .geo-card.fractal .card-icon {
+            background: rgba(108,60,225,0.15);
+            color: #A855F7;
+        }
+
+        .geo-card.euclidean .card-icon {
+            background: rgba(14,165,233,0.15);
+            color: #38BDF8;
+        }
+
+        .geo-card h5 {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .geo-card p {
+            color: #94A3B8;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Comparativa visual lado a lado */
+        .comparison-visual {
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .comparison-visual .panel {
+            padding: 3rem 2rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .comparison-visual .panel-fractal {
+            background: linear-gradient(180deg, rgba(108,60,225,0.12) 0%, rgba(15,23,42,1) 100%);
+        }
+
+        .comparison-visual .panel-euclidean {
+            background: linear-gradient(180deg, rgba(14,165,233,0.12) 0%, rgba(15,23,42,1) 100%);
+        }
+
+        .comparison-visual h4 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-visual p {
+            color: #94A3B8;
+            max-width: 280px;
+        }
+
+        /* SVG Fractal Animado */
+        .fractal-svg {
+            width: 180px;
+            height: 180px;
+            margin-bottom: 1.5rem;
+        }
+
+        .fractal-svg .branch {
+            stroke: #A855F7;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+        }
+
+        /* SVG Euclidiano */
+        .euclidean-svg {
+            width: 180px;
+            height: 180px;
+            margin-bottom: 1.5rem;
+        }
+
+        .euclidean-svg .shape {
+            stroke: #38BDF8;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* Tabla comparativa */
+        .table-comparison {
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .table-comparison thead th {
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-weight: 600;
+            padding: 1rem 1.25rem;
+            font-size: 0.95rem;
+        }
+
+        .table-comparison thead th:first-child {
+            color: #CBD5E1;
+        }
+
+        .table-comparison thead th:nth-child(2) {
+            color: #A855F7;
+        }
+
+        .table-comparison thead th:nth-child(3) {
+            color: #38BDF8;
+        }
+
+        .table-comparison tbody td {
+            padding: 1rem 1.25rem;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #CBD5E1;
+        }
+
+        .table-comparison tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-comparison tbody td:first-child {
+            font-weight: 600;
+            color: #E2E8F0;
+        }
+
+        .table-comparison tbody tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* Dimensiones */
+        .dimension-card {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            background: rgba(255,255,255,0.03);
+            height: 100%;
+        }
+
+        .dimension-card .dim-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .dimension-card.fractal .dim-value {
+            background: linear-gradient(135deg, #6C3CE1, #A855F7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dimension-card.euclidean .dim-value {
+            background: linear-gradient(135deg, #0EA5E9, #38BDF8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dimension-card h5 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .dimension-card p {
+            color: #94A3B8;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Aplicaciones */
+        .app-item {
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 0.75rem;
+            padding: 1.25rem 1.5rem;
+            background: rgba(255,255,255,0.03);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            transition: border-color 0.3s;
+        }
+
+        .app-item:hover {
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .app-item .app-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .app-item.fractal .app-icon {
+            background: rgba(108,60,225,0.15);
+            color: #A855F7;
+        }
+
+        .app-item.euclidean .app-icon {
+            background: rgba(14,165,233,0.15);
+            color: #38BDF8;
+        }
+
+        .app-item h6 {
+            margin-bottom: 0.15rem;
+            font-weight: 600;
+        }
+
+        .app-item p {
+            margin: 0;
+            color: #94A3B8;
+            font-size: 0.85rem;
+        }
+
+        /* Fractal Canvas */
+        .fractal-canvas-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        #fractalCanvas {
+            border-radius: 1rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: #0F172A;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 2.5rem 0;
+            text-align: center;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        /* Divider */
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            border-radius: 3px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .divider-fractal {
+            background: var(--fractal-gradient);
+        }
+
+        .divider-euclidean {
+            background: var(--euclidean-gradient);
+        }
+
+        .divider-mixed {
+            background: linear-gradient(135deg, var(--fractal-color), var(--euclidean-color));
+        }
+
+        @media (max-width: 767.98px) {
+            .hero h1 { font-size: 2.25rem; }
+            .section-title { font-size: 1.75rem; }
+            .comparison-visual .panel { min-height: 280px; padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1>Geometría Fractal <span class="vs-badge">vs</span> Euclidiana</h1>
+            <p class="subtitle">Explora las diferencias fundamentales entre la geometría clásica de formas regulares y la geometría del caos auto-similar que describe la naturaleza.</p>
+            <div class="scroll-indicator">Scroll ↓</div>
+        </div>
+    </section>
+
+    <!-- INTRO: ¿Qué es cada una? -->
+    <section>
+        <div class="container">
+            <div class="section-divider divider-mixed"></div>
+            <h2 class="section-title">¿Qué son?</h2>
+            <p class="section-subtitle">Dos formas de entender y describir la estructura del mundo que nos rodea.</p>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="geo-card fractal">
+                        <div class="card-icon">🌀</div>
+                        <h5>Geometría Fractal</h5>
+                        <p>Estudia formas con <strong>auto-similaridad</strong>: patrones que se repiten a diferentes escalas. Fue formalizada por Benoît Mandelbrot en 1975. Describe irregularidades, roughness y complejidad infinita con fórmulas simples iteradas.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="geo-card euclidean">
+                        <div class="card-icon">📐</div>
+                        <h5>Geometría Euclidiana</h5>
+                        <p>Sistematizada por Euclides (~300 a.C.), estudia puntos, rectas, planos y figuras regulares. Es la base de las matemáticas clásicas: ángulos, áreas, volúmenes y relaciones espaciales en dimensiones enteras.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARATIVA VISUAL LADO A LADO -->
+    <section>
+        <div class="container">
+            <div class="comparison-visual">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        <div class="panel panel-fractal">
+                            <!-- Koch Snowflake SVG -->
+                            <svg class="fractal-svg" viewBox="0 0 200 200">
+                                <g transform="translate(100,110)">
+                                    <!-- Koch snowflake approximation -->
+                                    <polygon class="branch" points="0,-80 69.3,40 -69.3,40" stroke-linejoin="round"/>
+                                    <!-- Level 1 bumps -->
+                                    <line class="branch" x1="0" y1="-80" x2="23.1" y2="-53.3"/>
+                                    <line class="branch" x1="23.1" y1="-53.3" x2="46.2" y2="-66.7"/>
+                                    <line class="branch" x1="46.2" y1="-66.7" x2="69.3" y2="-40"/>
+                                    <line class="branch" x1="69.3" y1="-40" x2="57.7" y2="-13.3"/>
+                                    <line class="branch" x1="57.7" y1="-13.3" x2="80.7" y2="6.7"/>
+                                    <line class="branch" x1="80.7" y1="6.7" x2="69.3" y2="40"/>
+                                    <line class="branch" x1="69.3" y1="40" x2="46.2" y2="26.7"/>
+                                    <line class="branch" x1="46.2" y1="26.7" x2="23.1" y2="46.7"/>
+                                    <line class="branch" x1="23.1" y1="46.7" x2="0" y2="40"/>
+                                    <line class="branch" x1="0" y1="40" x2="-23.1" y2="46.7"/>
+                                    <line class="branch" x1="-23.1" y1="46.7" x2="-46.2" y2="26.7"/>
+                                    <line class="branch" x1="-46.2" y1="26.7" x2="-69.3" y2="40"/>
+                                    <line class="branch" x1="-69.3" y1="40" x2="-80.7" y2="6.7"/>
+                                    <line class="branch" x1="-80.7" y1="6.7" x2="-57.7" y2="-13.3"/>
+                                    <line class="branch" x1="-57.7" y1="-13.3" x2="-69.3" y2="-40"/>
+                                    <line class="branch" x1="-69.3" y1="-40" x2="-46.2" y2="-66.7"/>
+                                    <line class="branch" x1="-46.2" y1="-66.7" x2="-23.1" y2="-53.3"/>
+                                    <line class="branch" x1="-23.1" y1="-53.3" x2="0" y2="-80"/>
+                                </g>
+                            </svg>
+                            <h4 style="color: #A855F7;">Geometría Fractal</h4>
+                            <p>Formas complejas generadas con reglas simples repetidas infinitamente. Cada parte contiene un_miniatura del todo.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-euclidean">
+                            <!-- Euclidean shapes SVG -->
+                            <svg class="euclidean-svg" viewBox="0 0 200 200">
+                                <!-- Triangle -->
+                                <polygon class="shape" points="100,25 155,115 45,115" style="animation: fadeIn 1s ease"/>
+                                <!-- Circle -->
+                                <circle class="shape" cx="100" cy="100" r="50" style="stroke-dasharray: 4 2"/>
+                                <!-- Square -->
+                                <rect class="shape" x="65" y="65" width="70" height="70" style="opacity: 0.5"/>
+                                <!-- Points -->
+                                <circle cx="100" cy="25" r="3" fill="#38BDF8"/>
+                                <circle cx="155" cy="115" r="3" fill="#38BDF8"/>
+                                <circle cx="45" cy="115" r="3" fill="#38BDF8"/>
+                            </svg>
+                            <h4 style="color: #38BDF8;">Geometría Euclidiana</h4>
+                            <p>Formas regulares, perfectas y medibles: triángulos, círculos, cuadrados y polígonos con dimensiones enteras.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TABLA COMPARATIVA -->
+    <section>
+        <div class="container">
+            <div class="section-divider divider-mixed"></div>
+            <h2 class="section-title">Comparativa Detallada</h2>
+            <p class="section-subtitle">Características clave de cada enfoque geométrico lado a lado.</p>
+
+            <div class="table-comparison">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>🌀 Fractal</th>
+                            <th>📐 Euclidiana</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Origen</td>
+                            <td>1975 — Benoît Mandelbrot</td>
+                            <td>~300 a.C. — Euclides</td>
+                        </tr>
+                        <tr>
+                            <td>Dimensiones</td>
+                            <td>Fraccionales (1.26, 1.58...)</td>
+                            <td>Enteras (1, 2, 3)</td>
+                        </tr>
+                        <tr>
+                            <td>Formas</td>
+                            <td>Irregulares, rugosas, auto-similares</td>
+                            <td>Regulares, lisas, simétricas</td>
+                        </tr>
+                        <tr>
+                            <td>Generación</td>
+                            <td>Iteración de fórmulas simples</td>
+                            <td>Construcción con regla y compás</td>
+                        </tr>
+                        <tr>
+                            <td>Complejidad</td>
+                            <td>Infinita a cualquier escala</td>
+                            <td>Finita y trazable</td>
+                        </tr>
+                        <tr>
+                            <td>Medición</td>
+                            <td>Perímetro infinito, área finita</td>
+                            <td>Medidas exactas y constantes</td>
+                        </tr>
+                        <tr>
+                            <td>Auto-similitud</td>
+                            <td>Sí — partes iguales al todo</td>
+                            <td>No — cada forma es única</td>
+                        </tr>
+                        <tr>
+                            <td>Modela</td>
+                            <td>Nubes, costas, árboles, galerías sanguíneas</td>
+                            <td>Edificios, máquinas, gráficas, mapas</td>
+                        </tr>
+                        <tr>
+                            <td>Ejemplos</td>
+                            <td>Conjunto de Mandelbrot, triángulo de Sierpinski, copo de Koch</td>
+                            <td>Círculo, cuadrado, esfera, triángulo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIMENSIONES -->
+    <section>
+        <div class="container">
+            <div class="section-divider divider-mixed"></div>
+            <h2 class="section-title">La Dimensión es la Clave</h2>
+            <p class="section-subtitle">La diferencia más profunda: los fractales existen en dimensiones fraccionarias.</p>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="dimension-card euclidean">
+                        <div class="dim-value">1D</div>
+                        <h5>Una Línea</h5>
+                        <p>Solo una dimensión: largo. Es euclidiana porque es perfectamente recta y medible.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dimension-card fractal">
+                        <div class="dim-value">1.26D</div>
+                        <h5>Curva de Koch</h5>
+                        <p>Más que una línea pero menos que una superficie. Su dimensión fractal es log(4)/log(3) ≈ 1.26.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dimension-card euclidean">
+                        <div class="dim-value">2D</div>
+                        <h5>Un Plano</h5>
+                        <p>Dos dimensiones: largo y ancho. Superficies euclidianas perfectamente planas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-2">
+                <div class="col-md-4">
+                    <div class="dimension-card fractal">
+                        <div class="dim-value">1.58D</div>
+                        <h5>Triángulo de Sierpinski</h5>
+                        <p>Huecos infinitos en un triángulo. Su dimensión fractal es log(3)/log(2) ≈ 1.58.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dimension-card euclidean">
+                        <div class="dim-value">3D</div>
+                        <h5>Un Cubo</h5>
+                        <p>Tres dimensiones: largo, ancho y alto. Volumen euclidiano convencional.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dimension-card fractal">
+                        <div class="dim-value">2.73D</div>
+                        <h5>Esponja de Menger</h5>
+                        <p>Un cubo con infinitos huecos. Dimensión fractal = log(20)/log(3) ≈ 2.73.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CANVAS INTERACTIVO -->
+    <section>
+        <div class="container">
+            <div class="section-divider divider-fractal"></div>
+            <h2 class="section-title">Árbol Fractal Interactivo</h2>
+            <p class="section-subtitle">Observa cómo la repetición de una regla simple genera complejidad infinita.</p>
+
+            <div class="fractal-canvas-wrap">
+                <canvas id="fractalCanvas" width="600" height="400"></canvas>
+            </div>
+            <div class="text-center">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-light" onclick="changeDepth(-1)">← Menos ramas</button>
+                    <button class="btn btn-outline-light" onclick="changeDepth(1)">Más ramas →</button>
+                </div>
+                <p class="mt-2" style="color:#64748B; font-size:0.85rem;">Profundidad: <span id="depthLabel">8</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- APLICACIONES -->
+    <section>
+        <div class="container">
+            <div class="section-divider divider-mixed"></div>
+            <h2 class="section-title">Aplicaciones en el Mundo Real</h2>
+            <p class="section-subtitle">Ambas geometrías son esenciales, cada una en su dominio.</p>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h5 style="color: #A855F7; font-weight: 600;">🌀 Geometría Fractal</h5>
+                    <div class="app-item fractal">
+                        <div class="app-icon">🌿</div>
+                        <div>
+                            <h6>Naturaleza</h6>
+                            <p>Modelado de nubes, costas, neuronas, árboles y sistemas circulatorios.</p>
+                        </div>
+                    </div>
+                    <div class="app-item fractal">
+                        <div class="app-icon">📡</div>
+                        <div>
+                            <h6>Telecomunicaciones</h6>
+                            <p>Antenas fractales compactas con múltiples bandas de frecuencia.</p>
+                        </div>
+                    </div>
+                    <div class="app-item fractal">
+                        <div class="app-icon">🎨</div>
+                        <div>
+                            <h6>Arte y Diseño</h6>
+                            <p>Generación procedural de paisajes, texturas y efectos visuales en videojuegos.</p>
+                        </div>
+                    </div>
+                    <div class="app-item fractal">
+                        <div class="app-icon">🏥</div>
+                        <div>
+                            <h6>Medicina</h6>
+                            <p>Análisis de tejidos, detección de tumores y modelado de estructuras pulmonares.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <h5 style="color: #38BDF8; font-weight: 600;">📐 Geometría Euclidiana</h5>
+                    <div class="app-item euclidean">
+                        <div class="app-icon">🏗️</div>
+                        <div>
+                            <h6>Arquitectura e Ingeniería</h6>
+                            <p>Cálculo de estructuras, áreas, volúmenes y distribución espacial.</p>
+                        </div>
+                    </div>
+                    <div class="app-item euclidean">
+                        <div class="app-icon">🗺️</div>
+                        <div>
+                            <h6>Cartografía</h6>
+                            <p>Proyecciones de mapas, coordenadas geográficas y navegación.</p>
+                        </div>
+                    </div>
+                    <div class="app-item euclidean">
+                        <div class="app-icon">⚙️</div>
+                        <div>
+                            <h6>Mecánica</h6>
+                            <p>Diseño de engranajes, piezas mecánicas y tolerancias industriales.</p>
+                        </div>
+                    </div>
+                    <div class="app-item euclidean">
+                        <div class="app-icon">📊</div>
+                        <div>
+                            <h6>Gráficos por Computadora</h6>
+                            <p>Modelado 3D, renderizado, transformaciones geométricas y física de videojuegos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FRASE FINAL -->
+    <section>
+        <div class="container text-center">
+            <div class="section-divider divider-mixed"></div>
+            <blockquote style="max-width:700px; margin:0 auto; font-size:1.35rem; font-style:italic; color:#CBD5E1; line-height:1.7;">
+                "La geometría fractal es la geometría del caos, y la euclidiana es la geometría del orden. Juntas, explican todo lo que vemos."
+            </blockquote>
+            <p style="color:#64748B; margin-top:1rem;">— Inspirado en Benoît Mandelbrot</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Comparativa Geometría Fractal vs Euclidiana — Proyecto Diseño Automático</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Fractal Tree
+        let maxDepth = 8;
+
+        function drawTree() {
+            const canvas = document.getElementById('fractalCanvas');
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width;
+            const H = canvas.height;
+
+            ctx.clearRect(0, 0, W, H);
+
+            function branch(x, y, len, angle, depth) {
+                if (depth === 0 || len < 2) return;
+
+                const x2 = x + Math.cos(angle) * len;
+                const y2 = y - Math.sin(angle) * len;
+
+                const ratio = depth / maxDepth;
+                const r = Math.round(108 + (168 - 108) * (1 - ratio));
+                const g = Math.round(60 + (85 - 60) * (1 - ratio));
+                const b = Math.round(225 + (247 - 225) * (1 - ratio));
+
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x2, y2);
+                ctx.strokeStyle = `rgb(${r},${g},${b})`;
+                ctx.lineWidth = Math.max(1, depth * 0.5);
+                ctx.stroke();
+
+                const spread = 0.45 + Math.sin(depth) * 0.05;
+                const shrink = 0.68 + Math.cos(depth) * 0.02;
+
+                branch(x2, y2, len * shrink, angle + spread, depth - 1);
+                branch(x2, y2, len * shrink, angle - spread, depth - 1);
+            }
+
+            branch(W / 2, H - 30, 90, Math.PI / 2, maxDepth);
+        }
+
+        function changeDepth(delta) {
+            maxDepth = Math.max(2, Math.min(14, maxDepth + delta));
+            document.getElementById('depthLabel').textContent = maxDepth;
+            drawTree();
+        }
+
+        drawTree();
+    </script>
+
+</body>
+</html>
