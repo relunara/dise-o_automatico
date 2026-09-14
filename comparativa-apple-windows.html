@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple vs Windows · Comparativa 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --apple-color: #A2AAAD;
+            --windows-color: #00A4EF;
+            --apple-gradient: linear-gradient(135deg, #333333, #A2AAAD);
+            --windows-gradient: linear-gradient(135deg, #003399, #00A4EF);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0F172A;
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(ellipse at 20% 50%, rgba(162,170,173,0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 50%, rgba(0,164,239,0.15) 0%, transparent 50%),
+                        #0F172A;
+        }
+
+        .hero h1 {
+            font-size: 3.25rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #94A3B8;
+            max-width: 640px;
+            margin: 1rem auto 0;
+        }
+
+        .hero .vs-badge {
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--apple-color), var(--windows-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 1.5rem 0;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #64748B;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, 10px); }
+        }
+
+        /* Logos */
+        .logo-badge {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0 auto 1rem;
+            color: #fff;
+        }
+
+        .logo-apple { background: var(--apple-gradient); }
+        .logo-windows { background: var(--windows-gradient); }
+
+        /* Section titles */
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 3rem 0 2rem;
+        }
+
+        /* Card glass */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            height: 100%;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(148, 163, 184, 0.4);
+        }
+
+        .apple-card:hover { border-color: rgba(162, 170, 173, 0.6); }
+        .windows-card:hover { border-color: rgba(0, 164, 239, 0.6); }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-tag {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #F8FAFC;
+        }
+
+        .tag-apple { color: #CBD5E1; }
+        .tag-windows { color: #00A4EF; }
+
+        .badge-2026 {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+        }
+
+        .badge-2026-apple { background: rgba(162,170,173,0.15); color: #CBD5E1; }
+        .badge-2026-windows { background: rgba(0,164,239,0.15); color: #00A4EF; }
+
+        /* Table */
+        .comparison-table {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1rem 1.25rem;
+            border-color: rgba(148, 163, 184, 0.15);
+            color: #CBD5E1;
+        }
+
+        .comparison-table thead th {
+            font-size: 1.1rem;
+            color: #F8FAFC;
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .comparison-table .col-apple { background: rgba(162,170,173,0.06); }
+        .comparison-table .col-windows { background: rgba(0,164,239,0.06); }
+
+        .winner {
+            color: #4ADE80;
+            font-weight: 600;
+        }
+
+        .loser {
+            color: #F87171;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(148, 163, 184, 0.15);
+            margin-top: 4rem;
+            padding: 1.5rem 0;
+            color: #64748B;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="d-flex justify-content-center gap-4 mb-3">
+                        <div class="logo-badge logo-apple">
+                            <span>🍎</span>
+                        </div>
+                        <span class="vs-badge align-self-center">VS</span>
+                        <div class="logo-badge logo-windows">
+                            <span>🪟</span>
+                        </div>
+                    </div>
+                    <h1>Apple vs Windows en 2026</h1>
+                    <p class="subtitle">
+                        Comparativa de los modelos y ecosistemas más recientes del 2026:
+                        hardware, rendimiento, precios y experiencia de uso.
+                    </p>
+                    <div class="mt-4">
+                        <a href="#comparativa" class="btn btn-light btn-lg px-4">Ver comparativa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">▼</div>
+    </header>
+
+    <!-- Modelos destacados -->
+    <section id="comparativa" class="container py-5">
+        <h2 class="section-title">Modelos estrella de 2026</h2>
+        <div class="row g-4">
+
+            <!-- Apple -->
+            <div class="col-md-6">
+                <div class="glass-card apple-card">
+                    <span class="badge-2026 badge-2026-apple mb-2 d-inline-block">Apple · 2026</span>
+                    <div class="card-title tag-apple">🍎 MacBook Pro 16" M6 Pro</div>
+                    <p class="text-secondary mb-3">
+                        Lanzado en marzo de 2026. Chip M6 Pro de 4 nm, hasta 64 GB de memoria unificada.
+                    </p>
+                    <div class="mb-3">
+                        <span class="d-block">Chip: Apple Silicon M6 Pro (12 núcleos CPU)</span>
+                        <span class="d-block">RAM: hasta 64 GB unificada</span>
+                        <span class="d-block">Almacenamiento: hasta 8 TB SSD</span>
+                        <span class="d-block">Pantalla: Liquid Retina XDR 16" · 120 Hz</span>
+                        <span class="d-block">Duración: hasta 26 horas</span>
+                    </div>
+                    <div class="price-tag">Desde $2,499</div>
+                </div>
+            </div>
+
+            <!-- Windows -->
+            <div class="col-md-6">
+                <div class="glass-card windows-card">
+                    <span class="badge-2026 badge-2026-windows mb-2 d-inline-block">Windows · 2026</span>
+                    <div class="card-title tag-windows">🪟 Surface Laptop 8 Copilot+</div>
+                    <p class="text-secondary mb-3">
+                        Lanzado en enero de 2026. Snapdragon X Elite Gen 2 con NPU de 80 TOPS para IA local.
+                    </p>
+                    <div class="mb-3">
+                        <span class="d-block">Chip: Snapdragon X Elite Gen 2 (12 núcleos)</span>
+                        <span class="d-block">RAM: hasta 64 GB LPDDR5X</span>
+                        <span class="d-block">Almacenamiento: hasta 2 TB NVMe</span>
+                        <span class="d-block">Pantalla: PixelSense 13.8" · 120 Hz</span>
+                        <span class="d-block">Duración: hasta 22 horas</span>
+                    </div>
+                    <div class="price-tag">Desde $1,999</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tabla comparativa -->
+    <section class="container py-4">
+        <h2 class="section-title">Tabla comparativa 2026</h2>
+        <div class="table-responsive comparison-table">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Característica</th>
+                        <th scope="col" class="col-apple">🍎 Apple</th>
+                        <th scope="col" class="col-windows">🪟 Windows</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sistema operativo</td>
+                        <td class="col-apple">macOS 27 "Lake Tahoe"</td>
+                        <td class="col-windows">Windows 12 (Sun Valley 3)</td>
+                    </tr>
+                    <tr>
+                        <td>Procesador insignia</td>
+                        <td class="col-apple">M6 Ultra (hasta 48 núcleos)</td>
+                        <td class="col-windows">Snapdragon X Elite Gen 2 / Intel Nova Lake</td>
+                    </tr>
+                    <tr>
+                        <td>IA generativa local</td>
+                        <td class="col-apple">Apple Intelligence · 60 TOPS</td>
+                        <td class="col-windows">Copilot+ PC · hasta 80 TOPS</td>
+                    </tr>
+                    <tr>
+                        <td>Eficiencia energética</td>
+                        <td class="col-apple winner">Excelente (nodos 4 nm + E-cores)</td>
+                        <td class="col-windows">Muy buena (qualcomm Arm)</td>
+                    </tr>
+                    <tr>
+                        <td>Ecosistema de apps</td>
+                        <td class="col-apple">App Store + iOS integración</td>
+                        <td class="col-windows winner">Microsoft Store + juego (Game Pass)</td>
+                    </tr>
+                    <tr>
+                        <td>Gaming</td>
+                        <td class="col-apple">Mejorando, aún limitado</td>
+                        <td class="col-windows winner">Superior (DX13, Game Pass, Steam)</td>
+                    </tr>
+                    <tr>
+                        <td>Compatibilidad hardware</td>
+                        <td class="col-apple">Cerrado, solo Apple</td>
+                        <td class="col-windows winner">Abierto, miles de fabricantes</td>
+                    </tr>
+                    <tr>
+                        <td>Precio de entrada</td>
+                        <td class="col-apple">Mac mini M6 desde $599</td>
+                        <td class="col-windows">Equipos desde $299</td>
+                    </tr>
+                    <tr>
+                        <td>Soporte de software</td>
+                        <td class="col-apple">~7 años de actualizaciones</td>
+                        <td class="col-windows">~5 años + seguridad extendida</td>
+                    </tr>
+                    <tr>
+                        <td>Seguridad / privacidad</td>
+                        <td class="col-apple winner">Muy estricta, sandboxing, Secure Enclave</td>
+                        <td class="col-windows">Titan Security, VBS, Secure Core</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Ventajas -->
+    <section class="container py-4">
+        <h2 class="section-title">¿Cuál elegir?</h2>
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="glass-card apple-card h-100">
+                    <div class="card-title tag-apple">🍎 Elige Apple si...</div>
+                    <ul class="mb-0 text-secondary">
+                        <li>Ya usas iPhone, iPad o Apple Watch.</li>
+                        <li>Priorizas eficiencia energética y duración de batería.</li>
+                        <li>Trabajas con edición de vídeo, música o diseño.</li>
+                        <li>Valoras una experiencia estética y pulida.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="glass-card windows-card h-100">
+                    <div class="card-title tag-windows">🪟 Elige Windows si...</div>
+                    <ul class="mb-0 text-secondary">
+                        <li>Juegas o quieres acceso a Game Pass y todo el catálogo de Steam.</li>
+                        <li>Necesitas compatibilidad con hardware de terceros.</li>
+                        <li>Buscas opciones más asequibles y variadas.</li>
+                        <li>Trabajas con IA local gracias a Copilot+ y sus 80 TOPS.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-0">Comparativa Apple vs Windows 2026 · Página creada con Bootstrap 5</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
